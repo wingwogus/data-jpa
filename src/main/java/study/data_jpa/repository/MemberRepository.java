@@ -16,11 +16,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
-    @Query(name = "Member.findByUsername")
+    //@Query(name = "Member.findByUsername")
     List<Member> findByUsername(@Param("username") String username);
+
 
     @Query("select m from Member m where m.username = :username and m.age = :age")
     List<Member> findUser(@Param("username") String username, @Param("age") int age);
@@ -43,6 +44,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findOptionalByUsername(String username);
 
     Page<Member> findByAge(int age, Pageable pageable);
+
+    @Query(value = "select m from Member m",
+            countQuery = "select count(m.username) from Member m")
+    Page<Member> findMemberAllCountBy(Pageable pageable);
 
     @Modifying(clearAutomatically = true)
     @Query("update Member m set m.age = m.age + 1 where m.age >= :age")

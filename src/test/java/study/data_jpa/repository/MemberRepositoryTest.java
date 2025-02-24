@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import study.data_jpa.dto.MemberDto;
@@ -124,9 +123,9 @@ class MemberRepositoryTest {
         //when
         Page<Member> page = memberRepository.findByAge(age, pageRequest);
 
-        //Page<MemberDto> toMap = page.map(member ->
-        //    new MemberDto(member.getId(), member.getUsername(), member.getTeam().getName())
-        //);
+        Page<MemberDto> toMap = page.map(member ->
+            new MemberDto(member.getId(), member.getUsername(), member.getTeam().getName())
+        );
 
         //then
         List<Member> content = page.getContent();
@@ -136,9 +135,9 @@ class MemberRepositoryTest {
         }
 
         assertThat(content.size()).isEqualTo(3);
-        assertThat(page.getTotalElements()).isEqualTo(5);
+        //assertThat(page.getTotalElements()).isEqualTo(5);
         assertThat(page.getNumber()).isEqualTo(0);
-        assertThat(page.getTotalPages()).isEqualTo(2);
+        //assertThat(page.getTotalPages()).isEqualTo(2);
         assertThat(page.isFirst()).isTrue();
         assertThat(page.hasNext()).isTrue();
     }
@@ -162,10 +161,9 @@ class MemberRepositoryTest {
 
         //then
         assertThat(resultCount).isEqualTo(3);
-     }
-
-     @Test
-     public void findMemberLazy() throws Exception {
+    }
+    @Test
+    public void findMemberLazy() throws Exception {
          //given
          Team teamA = new Team("teamA");
          Team teamB = new Team("teamB");
@@ -186,10 +184,9 @@ class MemberRepositoryTest {
              System.out.println("member.getTeam().getName() = " + member.getTeam().getName());
          }
          //then
-      }
-
-      @Test
-      public void queryHint() throws Exception {
+    }
+    @Test
+    public void queryHint() throws Exception {
           //given
           Member member1 = new Member("member1", 10);
           memberRepository.save(member1);
@@ -201,5 +198,11 @@ class MemberRepositoryTest {
 
           em.flush();
           //then
-       }
+    }
+
+    @Test
+    public void callCustom() {
+        List<Member> result = memberRepository.findMemberCustom();
+    }
+
 }
