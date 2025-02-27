@@ -1,14 +1,13 @@
 package study.data_jpa.repository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import study.data_jpa.entity.Member;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-public class MemberRepositoryImpl implements MemberRepositoryCustom {
+public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
 
     private final EntityManager em;
 

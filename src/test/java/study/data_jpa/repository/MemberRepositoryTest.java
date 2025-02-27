@@ -186,18 +186,21 @@ class MemberRepositoryTest {
          //then
     }
     @Test
-    public void queryHint() throws Exception {
-          //given
-          Member member1 = new Member("member1", 10);
-          memberRepository.save(member1);
-          em.flush();
-          em.clear();
-          //when
-          Member findMember = memberRepository.findReadOnlyByUsername("member1");
-          findMember.setUsername("member2");
+    public void queryHint() throws Exception { //스냅샷을 없애는 기능 -> 메모리 낭비 줄임
+        //given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
 
-          em.flush();
-          //then
+        //when
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.setUsername("member2");
+
+        em.flush();
+
+        //then
+
     }
 
     @Test
